@@ -7,11 +7,11 @@ class HelpState : GameObjectList
     public HelpState()
     {
         // add a background
-        SpriteGameObject background = new SpriteGameObject("Backgrounds/spr_help", 0, "background");
+        SpriteGameObject background = new SpriteGameObject("Backgrounds/spr_help", Camera.UILayer, "background");
         Add(background);
 
         // add a back but.ton
-        backButton = new Button("Sprites/spr_button_back", 1);
+        backButton = new Button("Sprites/spr_button_back", Camera.UILayer + 1);
         backButton.Position = new Vector2((GameEnvironment.Screen.X - backButton.Width) / 2, 750);
         Add(backButton);
     }

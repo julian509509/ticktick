@@ -17,10 +17,13 @@ public class GameEnvironment : Game
     protected static AssetManager assetManager;
     protected static GameSettingsManager gameSettingsManager;
 
+    public static Camera Camera { get; set; }
+
     public GameEnvironment()
     {
         graphics = new GraphicsDeviceManager(this);
 
+        Camera = new Camera(new Vector2(0, 0));
         inputHelper = new InputHelper();
         gameStateManager = new GameStateManager();
         spriteScale = Matrix.CreateScale(1, 1, 1);

@@ -41,6 +41,8 @@ partial class Player : AnimatedGameObject
 
     public override void HandleInput(InputHelper inputHelper)
     {
+        GameEnvironment.Camera.UpdatePosition(GlobalPosition);
+
         float walkingSpeed = 400;
         if (walkingOnIce)
         {

@@ -14,14 +14,14 @@ class LevelButton : GameObjectList
         this.levelIndex = levelIndex;
         this.level = level;
 
-        levelsSolved = new SpriteGameObject("Sprites/spr_level_solved", 0, "", levelIndex - 1);
-        levelsUnsolved = new SpriteGameObject("Sprites/spr_level_unsolved");
-        sprLock = new SpriteGameObject("Sprites/spr_level_locked", 2);
+        levelsSolved = new SpriteGameObject("Sprites/spr_level_solved", Camera.UILayer, "", levelIndex - 1);
+        levelsUnsolved = new SpriteGameObject("Sprites/spr_level_unsolved", Camera.UILayer + 1);
+        sprLock = new SpriteGameObject("Sprites/spr_level_locked", Camera.UILayer + 2);
         Add(levelsSolved);
         Add(levelsUnsolved);
         Add(sprLock);
 
-        text = new TextGameObject("Fonts/Hud", 1);
+        text = new TextGameObject("Fonts/Hud", Camera.UILayer + 1);
         text.Text = levelIndex.ToString();
         text.Position = new Vector2(sprLock.Width - text.Size.X - 10, 5);
         Add(text);
@@ -29,8 +29,7 @@ class LevelButton : GameObjectList
 
     public override void HandleInput(InputHelper inputHelper)
     {
-        pressed = inputHelper.MouseLeftButtonPressed() && !level.Locked &&
-            levelsSolved.BoundingBox.Contains((int)inputHelper.MousePosition.X, (int)inputHelper.MousePosition.Y);
+        pressed = (IsButtonPressedAndWithinBoundaries(inputHelper) && !level.Locked);
     }
 
     public override void Update(GameTime gameTime)
@@ -39,6 +38,24 @@ class LevelButton : GameObjectList
         sprLock.Visible = level.Locked;
         levelsSolved.Visible = level.Solved;
         levelsUnsolved.Visible = !level.Solved;
+    }
+
+    protected bool IsButtonPressedAndWithinBoundaries(InputHelper inputHelper)
+    {
+        if (layer >= Camera.UILayer)
+        {
+            float x = inputHelper.MousePosition.X;
+            float y = inputHelper.MousePosition.Y;
+
+            return inputHelper.MouseLeftButtonPressed() && levelsSolved.BoundingBox.Contains(x, y);
+        }
+        else
+        {
+            float x = inputHelper.MousePosition.X - GameEnvironment.Camera.Position.X;
+            float y = inputHelper.MousePosition.Y - GameEnvironment.Camera.Position.Y;
+
+            return inputHelper.MouseLeftButtonPressed() && levelsSolved.BoundingBox.Contains(x, y);
+        }
     }
 
     public int LevelIndex

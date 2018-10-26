@@ -18,7 +18,13 @@ public class TextGameObject : GameObject
     {
         if (visible)
         {
-            spriteBatch.DrawString(spriteFont, text, GlobalPosition, color);
+            if(layer >= Camera.UILayer)
+            {
+                spriteBatch.DrawString(spriteFont, text, GlobalPosition, color);
+            } else
+            {
+                spriteBatch.DrawString(spriteFont, text, GlobalPosition - GameEnvironment.Camera.Position, color);
+            }
         }
     }
 

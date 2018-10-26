@@ -42,6 +42,9 @@ partial class Level : GameObjectList
                 tiles.Add(t, x, y);
             }
         }
+
+        Vector2 worldSize = new Vector2(tiles.CellWidth * width, tiles.CellHeight * (textLines.Count - 1));
+        GameEnvironment.Camera.SetLevelBoundaries(worldSize);
     }
 
     private Tile LoadTile(char tileType, int x, int y)

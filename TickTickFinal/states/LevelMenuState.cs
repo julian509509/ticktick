@@ -11,7 +11,7 @@ class LevelMenuState : GameObjectList
         List<Level> levels = playingState.Levels;
 
         // add a background
-        SpriteGameObject background = new SpriteGameObject("Backgrounds/spr_levelselect", 0, "background");
+        SpriteGameObject background = new SpriteGameObject("Backgrounds/spr_levelselect", Camera.UILayer, "background");
         Add(background);
 
         // add the level buttons
@@ -19,13 +19,13 @@ class LevelMenuState : GameObjectList
         {
             int row = i / 4;
             int column = i % 4;
-            LevelButton level = new LevelButton(i + 1, levels[i], 1);
+            LevelButton level = new LevelButton(i + 1, levels[i], Camera.UILayer + 1);
             level.Position = new Vector2(column * (level.Width + 20), row * (level.Height + 20)) + new Vector2(390, 180);
             Add(level);
         }
 
         // add a back button
-        backButton = new Button("Sprites/spr_button_back", 1);
+        backButton = new Button("Sprites/spr_button_back", Camera.UILayer + 1);
         backButton.Position = new Vector2((GameEnvironment.Screen.X - backButton.Width) / 2, 750);
         Add(backButton);
     }

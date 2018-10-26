@@ -26,17 +26,16 @@ partial class Level : GameObjectList
         backgrounds.Add(clouds);
         Add(backgrounds);
 
-        SpriteGameObject timerBackground = new SpriteGameObject("Sprites/spr_timer", 100);
+        SpriteGameObject timerBackground = new SpriteGameObject("Sprites/spr_timer", Camera.UILayer);
         timerBackground.Position = new Vector2(10, 10);
         Add(timerBackground);
-        TimerGameObject timer = new TimerGameObject(101, "timer");
+        TimerGameObject timer = new TimerGameObject(Camera.UILayer + 1, "timer");
         timer.Position = new Vector2(25, 30);
         Add(timer);
 
-        quitButton = new Button("Sprites/spr_button_quit", 100);
+        quitButton = new Button("Sprites/spr_button_quit", Camera.UILayer - 1);
         quitButton.Position = new Vector2(GameEnvironment.Screen.X - quitButton.Width - 10, 10);
         Add(quitButton);
-
 
         Add(new GameObjectList(1, "waterdrops"));
         Add(new GameObjectList(2, "enemies"));

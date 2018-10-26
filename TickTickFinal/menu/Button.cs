@@ -10,8 +10,25 @@
 
     public override void HandleInput(InputHelper inputHelper)
     {
-        pressed = inputHelper.MouseLeftButtonPressed() &&
-            BoundingBox.Contains((int)inputHelper.MousePosition.X, (int)inputHelper.MousePosition.Y);
+        pressed = IsButtonPressedAndWithinBoundaries(inputHelper);
+    }
+
+    protected bool IsButtonPressedAndWithinBoundaries(InputHelper inputHelper)
+    {
+        if (layer >= Camera.UILayer)
+        {
+            float x = inputHelper.MousePosition.X;
+            float y = inputHelper.MousePosition.Y;
+
+            return inputHelper.MouseLeftButtonPressed() && BoundingBox.Contains(x, y);
+        }
+        else
+        {
+            float x = inputHelper.MousePosition.X + GameEnvironment.Camera.Position.X;
+            float y = inputHelper.MousePosition.Y + GameEnvironment.Camera.Position.Y;
+
+            return inputHelper.MouseLeftButtonPressed() && BoundingBox.Contains(x, y);
+        }
     }
 
     public override void Reset()
