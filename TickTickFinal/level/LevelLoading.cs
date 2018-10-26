@@ -15,28 +15,49 @@ partial class Level : GameObjectList
             textLines.Add(line);
             line = fileReader.ReadLine();
         }
-        TileField tiles = new TileField(textLines.Count - 1, width, 1, "tiles");
 
         GameObjectList hintField = new GameObjectList(100);
         Add(hintField);
+
         string hint = textLines[textLines.Count - 1];
         SpriteGameObject hintFrame = new SpriteGameObject("Overlays/spr_frame_hint", 1);
         hintField.Position = new Vector2((GameEnvironment.Screen.X - hintFrame.Width) / 2, 10);
         hintField.Add(hintFrame);
+
         TextGameObject hintText = new TextGameObject("Fonts/HintFont", 2);
-        hintText.Text = textLines[textLines.Count - 1];
+        hintText.Text = hint;
         hintText.Position = new Vector2(120, 25);
         hintText.Color = Color.Black;
         hintField.Add(hintText);
+
+        //Simply stores the number of extra lines at the end of a file that aren't the map itself
+        int addInfo = 1;
+
+        string timeInMin = textLines[textLines.Count - 2];
+        double time;
+        TimerGameObject timer;
+        if(double.TryParse(timeInMin, out time)){
+            timer = new TimerGameObject(Camera.UILayer + 1, "timer", time);
+            addInfo++;
+        } else
+        {
+            timer = new TimerGameObject(Camera.UILayer + 1, "timer");
+        }
+        timer.Position = new Vector2(25, 30);
+        Add(timer);
+
         VisibilityTimer hintTimer = new VisibilityTimer(hintField, 1, "hintTimer");
         Add(hintTimer);
 
+
+        TileField tiles = new TileField(textLines.Count - addInfo, width, 1, "tiles");
         Add(tiles);
+
         tiles.CellWidth = 72;
         tiles.CellHeight = 55;
         for (int x = 0; x < width; ++x)
         {
-            for (int y = 0; y < textLines.Count - 1; ++y)
+            for (int y = 0; y < textLines.Count - addInfo; ++y)
             {
                 Tile t = LoadTile(textLines[y][x], x, y);
                 tiles.Add(t, x, y);
