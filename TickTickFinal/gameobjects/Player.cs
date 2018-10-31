@@ -12,9 +12,14 @@ partial class Player : AnimatedGameObject
     protected bool exploded;
     protected bool finished;
     protected bool walkingOnIce, walkingOnHot;
-    protected bool hasShield;
-    protected float bombThrowCooldown = 0.0f;
-   // protected Throwable bomb;
+    protected bool hasShield; //Whether or not the player currently has a shield
+    protected bool wasJustHitByEnemy; // Stores whether the player was just hit by an enemy
+    protected double bombThrowCooldown;
+
+    //The amount of time the player has protection from taking damage after being hit and having a shield
+    protected const double AfterHitProtectionInSeconds = 3;
+    //Stores the reamining amount of milliseconds before the hit proctection is removed
+    protected double hitCooldown;
 
     public Vector2 PreviousPosition { get; private set; }
 
@@ -43,10 +48,10 @@ partial class Player : AnimatedGameObject
         walkingOnIce = false;
         walkingOnHot = false;
         hasShield = false;
+        wasJustHitByEnemy = false;
         PlayAnimation("idle");
         PreviousPosition = new Vector2(BoundingBox.Left, BoundingBox.Bottom);
         previousYPosition = BoundingBox.Bottom;
-        //bomb = new Throwable(new Vector2(-150, 0), new Vector2(0, 0), );
     }
 
     public override void HandleInput(InputHelper inputHelper)
@@ -96,14 +101,24 @@ partial class Player : AnimatedGameObject
 
     public override void Update(GameTime gameTime)
     {
+        //Store the previous position. Used for parallax effect
         PreviousPosition = position;
 
         base.Update(gameTime);
         if(bombThrowCooldown > 0)
         {
-            bombThrowCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (bombThrowCooldown < 0.0f){
-                bombThrowCooldown = 0.0f;
+            bombThrowCooldown -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (bombThrowCooldown < 0){
+                bombThrowCooldown = 0;
+            }
+        }
+
+        if (wasJustHitByEnemy)
+        {
+            hitCooldown -= gameTime.ElapsedGameTime.TotalSeconds;
+            if(hitCooldown <= 0)
+            {
+                wasJustHitByEnemy = false;
             }
         }
 
@@ -174,6 +189,8 @@ partial class Player : AnimatedGameObject
         Shield shield = GameWorld.Find("playerShield") as Shield;
         shield.StopShield();
         hasShield = false;
+        wasJustHitByEnemy = true;
+        hitCooldown = AfterHitProtectionInSeconds;
     }
 
     public void Die(bool falling)
@@ -186,6 +203,9 @@ partial class Player : AnimatedGameObject
         if (hasShield)
         {
             DestroyShield();
+            return;
+        }else if (wasJustHitByEnemy)
+        {
             return;
         }
 

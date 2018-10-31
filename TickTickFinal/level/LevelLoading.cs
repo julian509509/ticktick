@@ -140,9 +140,9 @@ partial class Level : GameObjectList
             case 'S':
                 return LoadSparkyTile(x, y);
             case 'P':
-                return LoadShieldItemTile(x, y);
-            case 'B':
-
+                return LoadShieldTile(x, y);
+            case 'E':
+                return LoadExtraTimeTile(x, y);           
             case 'C':
                 return LoadFlameTile(x, y, tileType);
             default:
@@ -214,7 +214,7 @@ partial class Level : GameObjectList
         return new Tile();
     }
 
-    private Tile LoadShieldItemTile(int x, int y)
+    private Tile LoadShieldTile(int x, int y)
     {
         GameObjectList shields = Find("shields") as GameObjectList;
         TileField tiles = Find("tiles") as TileField;
@@ -226,6 +226,20 @@ partial class Level : GameObjectList
 
         Shield shield = new Shield();
         Add(shield);
+        return new Tile();
+    }
+
+    private Tile LoadExtraTimeTile(int x, int y)
+    {
+        GameObjectList extraTimeItems = Find("extratimeitems") as GameObjectList;
+        
+        TileField tiles = Find("tiles") as TileField;
+        ExtraTimeItem extraTime = new ExtraTimeItem();
+        extraTime.Origin = extraTime.Center;
+        extraTime.Position = new Vector2(x * tiles.CellWidth, y * tiles.CellHeight - 10);
+        extraTime.Position += new Vector2(tiles.CellWidth, tiles.CellHeight) / 2;
+
+        extraTimeItems.Add(extraTime);
         return new Tile();
     }
 

@@ -636,3 +636,15 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Shield/spr_playerShield@9.png
 
+#begin Sprites/spr_extraTime.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/spr_extraTime.jpg
+

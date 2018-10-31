@@ -3,7 +3,7 @@
 class Shield : AnimatedGameObject
 {
     //A constant to define the max duration of a shield
-    protected double MaxDurationInMs = 10;
+    protected double MaxDurationInSeconds = 10;
 
     //Stores the remaining duration of this shield
     protected double duration;
@@ -28,7 +28,7 @@ class Shield : AnimatedGameObject
 
     public override void Reset()
     {
-        duration = MaxDurationInMs;
+        duration = MaxDurationInSeconds;
         visible = false;
     }
 

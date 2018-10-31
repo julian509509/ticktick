@@ -17,6 +17,11 @@ class TimerGameObject : TextGameObject
         running = true;
     }
 
+    public void AddSecondsToTimer(int seconds)
+    {
+        timeLeft += TimeSpan.FromSeconds(seconds);
+    }
+
     public override void Update(GameTime gameTime)
     {
         if (!running)

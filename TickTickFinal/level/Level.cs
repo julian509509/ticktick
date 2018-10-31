@@ -18,6 +18,7 @@ partial class Level : GameObjectList
 
         Add(new GameObjectList(1, "waterdrops"));
         Add(new GameObjectList(1, "shields"));
+        Add(new GameObjectList(1, "extratimeitems"));
         Add(new GameObjectList(2, "enemies"));
 
         LoadTiles("Content/Levels/" + levelIndex + ".txt");
