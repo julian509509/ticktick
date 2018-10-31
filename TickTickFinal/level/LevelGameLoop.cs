@@ -9,6 +9,7 @@ partial class Level : GameObjectList
         if (quitButton.Pressed)
         {
             Reset();
+            GameEnvironment.Camera.Reset();
             GameEnvironment.GameStateManager.SwitchTo("levelMenu");
         }      
     }

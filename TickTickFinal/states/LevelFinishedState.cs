@@ -20,6 +20,7 @@ class LevelFinishedState : GameObjectList
         {
             return;
         }
+        GameEnvironment.Camera.Reset();
         GameEnvironment.GameStateManager.SwitchTo("playingState");
         (playingState as PlayingState).NextLevel();
     }

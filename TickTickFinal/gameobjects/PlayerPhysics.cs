@@ -74,6 +74,7 @@ partial class Player :  AnimatedGameObject
                 }
             }
         }
+
         position = new Vector2((float)Math.Floor(position.X), (float)Math.Floor(position.Y));
         previousYPosition = position.Y;
     }

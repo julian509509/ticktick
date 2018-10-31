@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-class Turtle : AnimatedGameObject
+class Turtle : Enemy
 {
     protected float sneezeTime;
     protected float idleTime;

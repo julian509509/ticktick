@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 partial class Player : AnimatedGameObject
 {
@@ -11,6 +13,9 @@ partial class Player : AnimatedGameObject
     protected bool exploded;
     protected bool finished;
     protected bool walkingOnIce, walkingOnHot;
+    protected bool hasShield;
+
+    public Vector2 PreviousPosition { get; private set; }
 
     public Player(Vector2 start) : base(2, "player")
     {
@@ -19,9 +24,10 @@ partial class Player : AnimatedGameObject
         LoadAnimation("Sprites/Player/spr_jump@14", "jump", false, 0.05f); 
         LoadAnimation("Sprites/Player/spr_celebrate@14", "celebrate", false, 0.05f);
         LoadAnimation("Sprites/Player/spr_die@5", "die", false);
-        LoadAnimation("Sprites/Player/spr_explode@5x5", "explode", false, 0.04f); 
+        LoadAnimation("Sprites/Player/spr_explode@5x5", "explode", false, 0.04f);
 
         startPosition = start;
+        PreviousPosition = start;
         Reset();
     }
 
@@ -35,7 +41,9 @@ partial class Player : AnimatedGameObject
         finished = false;
         walkingOnIce = false;
         walkingOnHot = false;
+        hasShield = false;
         PlayAnimation("idle");
+        PreviousPosition = new Vector2(BoundingBox.Left, BoundingBox.Bottom);
         previousYPosition = BoundingBox.Bottom;
     }
 
@@ -76,7 +84,10 @@ partial class Player : AnimatedGameObject
 
     public override void Update(GameTime gameTime)
     {
+        PreviousPosition = position;
+
         base.Update(gameTime);
+
         if (!finished && isAlive)
         {
             if (isOnTheGround)
@@ -115,7 +126,7 @@ partial class Player : AnimatedGameObject
                 Die(true);
             }
         }
-
+        
         DoPhysics();
     }
 
@@ -132,12 +143,28 @@ partial class Player : AnimatedGameObject
         PlayAnimation("explode");
     }
 
+    public void ApplyShield()
+    {
+        Console.WriteLine("applied shield");
+        Shield shield = GameWorld.Find("playerShield") as Shield;
+        shield.ActivateShield();
+        hasShield = true;
+    }
+
     public void Die(bool falling)
     {
         if (!isAlive || finished)
         {
             return;
         }
+
+        if (hasShield)
+        {
+            Console.WriteLine("lost shield");
+            hasShield = false;
+            return;
+        }
+
         isAlive = false;
         velocity.X = 0.0f;
         if (falling)

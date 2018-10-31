@@ -33,6 +33,12 @@ public class AnimatedGameObject : SpriteGameObject
         origin = new Vector2(sprite.Width / 2, sprite.Height);        
     }
 
+    public void StopAnimation(string id)
+    {
+        animations[id].Stop();
+        sprite = null;
+    }
+
     public override void Update(GameTime gameTime)
     {
         if (sprite == null)

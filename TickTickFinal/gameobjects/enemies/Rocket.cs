@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-class Rocket : AnimatedGameObject
+class Rocket : Enemy
 {
     protected double spawnTime;
     protected Vector2 startPosition;
@@ -50,7 +50,8 @@ class Rocket : AnimatedGameObject
         Player player = GameWorld.Find("player") as Player;
         if (CollidesWith(player) && visible)
         {
-            if ((player.Position.Y < this.position.Y) && player.Velocity.Y > 0)
+            //If the player is above the rocket and the player is falling down
+            if ((player.BoundingBox.Bottom < this.position.Y) && player.Velocity.Y > 0)
             {
                 Reset();
                 player.Jump();

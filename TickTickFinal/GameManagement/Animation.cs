@@ -19,6 +19,11 @@ public class Animation : SpriteSheet
         time = 0.0f;
     }
 
+    public void Stop()
+    {
+        sheetIndex = NumberSheetElements - 1;
+    }
+
     public void Update(GameTime gameTime)
     {
         time += (float)gameTime.ElapsedGameTime.TotalSeconds;

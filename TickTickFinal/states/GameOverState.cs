@@ -21,6 +21,7 @@ class GameOverState : GameObjectList
             return;
         }
         playingState.Reset();
+        GameEnvironment.Camera.Reset();
         GameEnvironment.GameStateManager.SwitchTo("playingState");
     }
 

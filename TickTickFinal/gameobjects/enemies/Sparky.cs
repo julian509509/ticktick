@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-class Sparky : AnimatedGameObject
+class Sparky : Enemy
 {
     protected float idleTime;
     protected float yOffset;

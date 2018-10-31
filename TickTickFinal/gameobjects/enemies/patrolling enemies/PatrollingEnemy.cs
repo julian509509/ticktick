@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-class PatrollingEnemy : AnimatedGameObject
+class PatrollingEnemy : Enemy
 {
     protected float waitTime;
 

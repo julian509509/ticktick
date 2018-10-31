@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 class LevelMenuState : GameObjectList
@@ -54,6 +55,7 @@ class LevelMenuState : GameObjectList
         {
             PlayingState playingState = GameEnvironment.GameStateManager.GetGameState("playingState") as PlayingState;
             playingState.CurrentLevelIndex = LevelSelected - 1;
+            playingState.CurrentLevel.PrepareCamera();
             GameEnvironment.GameStateManager.SwitchTo("playingState");
         }
         else if (backButton.Pressed)

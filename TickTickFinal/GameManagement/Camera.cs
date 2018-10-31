@@ -16,6 +16,8 @@ public class Camera
     private Vector2 position;
     public Vector2 Position { get { return position; } }
 
+    public Vector2 PreviousPosition { get; private set; }
+
     private float maxYOffset;
     private float maxXOffset;
 
@@ -24,18 +26,29 @@ public class Camera
         this.position = position;
     }
 
+    //Used to make sure the camera can't view outside of the map
     public void SetLevelBoundaries(Vector2 worldSize)
     {
         maxXOffset = worldSize.X - GameEnvironment.Screen.X;
         maxYOffset = worldSize.Y - GameEnvironment.Screen.Y;
     }
 
+    public void Reset()
+    {
+        position = new Vector2(0, 0);
+    }
+
     public void UpdatePosition(Vector2 playerPos)
     {
+        //Store previous position
+        PreviousPosition = position;
+
+        //Calculate the new position
         position.X = playerPos.X - GameEnvironment.Screen.X / 2;
         position.Y = playerPos.Y - GameEnvironment.Screen.Y / 2;
 
-        /*if(position.X > maxXOffset)
+        //Make sure the camera is within boundaries
+        if(position.X > maxXOffset)
         {
             position.X = maxXOffset;
         }else if(position.X < 0)
@@ -50,8 +63,6 @@ public class Camera
         else if (position.Y < 0)
         {
             position.Y = 0;
-        }*/
-
-        Console.WriteLine("x" + maxXOffset + " y: " + maxYOffset);
+        }
     }
 }

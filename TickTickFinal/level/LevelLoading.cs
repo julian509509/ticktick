@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 
 partial class Level : GameObjectList
 {
+    public Vector2 WorldSize { get; private set; }
+
     public void LoadTiles(string path)
     {
         List<string> textLines = new List<string>();
         StreamReader fileReader = new StreamReader(path);
         string line = fileReader.ReadLine();
-        int width = line.Length;
+        width = line.Length;
         while (line != null)
         {
             textLines.Add(line);
@@ -49,23 +52,59 @@ partial class Level : GameObjectList
         VisibilityTimer hintTimer = new VisibilityTimer(hintField, 1, "hintTimer");
         Add(hintTimer);
 
-
         TileField tiles = new TileField(textLines.Count - addInfo, width, 1, "tiles");
         Add(tiles);
 
+        height = textLines.Count - addInfo;
         tiles.CellWidth = 72;
         tiles.CellHeight = 55;
         for (int x = 0; x < width; ++x)
         {
-            for (int y = 0; y < textLines.Count - addInfo; ++y)
+            for (int y = 0; y < height; ++y)
             {
                 Tile t = LoadTile(textLines[y][x], x, y);
                 tiles.Add(t, x, y);
             }
         }
 
-        Vector2 worldSize = new Vector2(tiles.CellWidth * width, tiles.CellHeight * (textLines.Count - 1));
-        GameEnvironment.Camera.SetLevelBoundaries(worldSize);
+        WorldSize = new Vector2(72 * width, 55 * height);
+        AddBackgroundSprites();
+    }
+
+    public void PrepareCamera()
+    {
+        GameEnvironment.Camera.SetLevelBoundaries(WorldSize);
+    }
+
+    private void AddBackgroundSprites()
+    {
+        SpriteGameObject backgroundSky = new SpriteGameObject("Backgrounds/spr_sky");
+        int numBackgrounds = (int)Math.Ceiling(WorldSize.X / backgroundSky.Width);
+
+        GameObjectList mainBackground = new GameObjectList(0, "background");
+        backgroundSky.Position = new Vector2(0, GameEnvironment.Screen.Y - backgroundSky.Height);
+        mainBackground.Add(backgroundSky);
+
+        //Create the backgrounds
+        for (int i = 1; i < numBackgrounds; i++)
+        {
+            // Load the backgrounds
+            backgroundSky = new SpriteGameObject("Backgrounds/spr_sky");
+            backgroundSky.Position = new Vector2(backgroundSky.Width * i, GameEnvironment.Screen.Y - backgroundSky.Height);
+            Add(backgroundSky);
+        }
+
+        //Create mountains and clouds
+        for (int i = 0; i < numBackgrounds; i++)
+        {
+            Mountains mountains = new Mountains(WorldSize, 1);
+            mainBackground.Add(mountains);
+
+            Clouds clouds = new Clouds(WorldSize, mountains.Children.Count + 1);
+            mainBackground.Add(clouds);
+        }
+
+        Add(mainBackground);
     }
 
     private Tile LoadTile(char tileType, int x, int y)
@@ -100,8 +139,10 @@ partial class Level : GameObjectList
                 return LoadRocketTile(x, y, false);
             case 'S':
                 return LoadSparkyTile(x, y);
-            case 'A':
+            case 'P':
+                return LoadShieldItemTile(x, y);
             case 'B':
+
             case 'C':
                 return LoadFlameTile(x, y, tileType);
             default:
@@ -153,7 +194,6 @@ partial class Level : GameObjectList
         return new Tile();
     }
 
-
     private Tile LoadSparkyTile(int x, int y)
     {
         GameObjectList enemies = Find("enemies") as GameObjectList;
@@ -171,6 +211,21 @@ partial class Level : GameObjectList
         Vector2 startPosition = new Vector2(((float)x + 0.5f) * tiles.CellWidth, (y + 1) * tiles.CellHeight);
         Rocket enemy = new Rocket(moveToLeft, startPosition);
         enemies.Add(enemy);
+        return new Tile();
+    }
+
+    private Tile LoadShieldItemTile(int x, int y)
+    {
+        GameObjectList shields = Find("shields") as GameObjectList;
+        TileField tiles = Find("tiles") as TileField;
+        ShieldItem shieldItem = new ShieldItem();
+        shieldItem.Origin = shieldItem.Center;
+        shieldItem.Position = new Vector2(x * tiles.CellWidth, y * tiles.CellHeight - 10);
+        shieldItem.Position += new Vector2(tiles.CellWidth, tiles.CellHeight) / 2;
+        shields.Add(shieldItem);
+
+        Shield shield = new Shield();
+        Add(shield);
         return new Tile();
     }
 
