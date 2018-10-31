@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
+using TickTick5.gameobjects;
 
 partial class Player : AnimatedGameObject
 {
@@ -11,6 +12,8 @@ partial class Player : AnimatedGameObject
     protected bool exploded;
     protected bool finished;
     protected bool walkingOnIce, walkingOnHot;
+    protected float cooldown = 0.0f;
+    protected Throwable bomb;
 
     public Player(Vector2 start) : base(2, "player")
     {
@@ -37,6 +40,7 @@ partial class Player : AnimatedGameObject
         walkingOnHot = false;
         PlayAnimation("idle");
         previousYPosition = BoundingBox.Bottom;
+        bomb = new Throwable(new Vector2(-150, 0), new Vector2(0, 0), );
     }
 
     public override void HandleInput(InputHelper inputHelper)
@@ -51,6 +55,11 @@ partial class Player : AnimatedGameObject
         if (!isAlive)
         {
             return;
+        }
+        if (inputHelper.IsKeyDown(Keys.F))
+        {
+            ThrowBomb();
+            cooldown = 3.0f;
         }
         if (inputHelper.IsKeyDown(Keys.Left))
         {
@@ -74,9 +83,21 @@ partial class Player : AnimatedGameObject
         }
     }
 
+    public void ThrowBomb()
+    {
+        // doe iets
+    }
+
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+        if(cooldown > 0)
+        {
+            cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (cooldown < 0.0f){
+                cooldown = 0.0f;
+            }
+        }
         if (!finished && isAlive)
         {
             if (isOnTheGround)

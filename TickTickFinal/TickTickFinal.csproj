@@ -68,6 +68,7 @@
     <Compile Include="gameobjects\enemies\UnpredictableEnemy.cs" />
     <Compile Include="gameobjects\Player.cs" />
     <Compile Include="gameobjects\PlayerPhysics.cs" />
+    <Compile Include="gameobjects\Throwable.cs" />
     <Compile Include="gameobjects\Tile.cs" />
     <Compile Include="gameobjects\TileField.cs" />
     <Compile Include="gameobjects\TimerGameObject.cs" />
