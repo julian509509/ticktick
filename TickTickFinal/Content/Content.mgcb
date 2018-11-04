@@ -637,6 +637,7 @@
 /build:Sprites/Shield/spr_playerShield@9.png
 
 #begin Sprites/Bomb.png
+#begin Sprites/spr_extraTime.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -647,4 +648,5 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/Bomb.png
+/build:Sprites/spr_extraTime.jpg
 

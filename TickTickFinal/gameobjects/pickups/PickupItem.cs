@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class ShieldItem : SpriteGameObject
+abstract class PickupItem : SpriteGameObject
 {
     protected float bounce;
 
-    public ShieldItem(int layer = 0, string id = "") : base("Sprites/Shield/spr_shield", layer, id)
+    public PickupItem(string assetName, int layer = 0, string id = "") : base(assetName, layer, id)
     {
     }
 
@@ -22,7 +22,10 @@ class ShieldItem : SpriteGameObject
         if (visible && CollidesWith(player))
         {
             visible = false;
-            player.ApplyShield();
+            OnPickupItem();
         }
     }
+
+    //Event that runs whenever the pickup item is picked up
+    protected virtual void OnPickupItem() { }
 }
