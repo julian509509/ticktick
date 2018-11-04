@@ -58,14 +58,26 @@ class Sparky : Enemy
         }
 
         CheckPlayerCollision();
+        CheckBombCollision();
     }
 
     public void CheckPlayerCollision()
     {
         Player player = GameWorld.Find("player") as Player;
+        Throwable bomb = GameWorld.Find("bomb") as Throwable;
         if (CollidesWith(player) && idleTime <= 0)
         {
             player.Die(false);
+        }
+    }
+
+    public void CheckBombCollision()
+    {
+        Throwable bomb = GameWorld.Find("bomb") as Throwable;
+        if (CollidesWith(bomb) && visible)
+        {
+            Reset();
+            bomb.Die();
         }
     }
 }

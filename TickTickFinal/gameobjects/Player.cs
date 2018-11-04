@@ -14,7 +14,6 @@ partial class Player : AnimatedGameObject
     protected bool walkingOnIce, walkingOnHot;
     protected bool hasShield;
     protected float bombThrowCooldown = 0.0f;
-   // protected Throwable bomb;
 
     public Vector2 PreviousPosition { get; private set; }
 
@@ -46,7 +45,6 @@ partial class Player : AnimatedGameObject
         PlayAnimation("idle");
         PreviousPosition = new Vector2(BoundingBox.Left, BoundingBox.Bottom);
         previousYPosition = BoundingBox.Bottom;
-        //bomb = new Throwable(new Vector2(-150, 0), new Vector2(0, 0), );
     }
 
     public override void HandleInput(InputHelper inputHelper)
@@ -62,9 +60,14 @@ partial class Player : AnimatedGameObject
         {
             return;
         }
-        if (inputHelper.IsKeyDown(Keys.F))
+        if (inputHelper.IsKeyDown(Keys.E) && bombThrowCooldown == 0)
         {
-            ThrowBomb();
+            ThrowBomb(true);
+            bombThrowCooldown = 3.0f;
+        }
+        if (inputHelper.IsKeyDown(Keys.Q) && bombThrowCooldown == 0)
+        {
+            ThrowBomb(false);
             bombThrowCooldown = 3.0f;
         }
         if (inputHelper.IsKeyDown(Keys.Left))
@@ -89,9 +92,10 @@ partial class Player : AnimatedGameObject
         }
     }
 
-    public void ThrowBomb()
+    public void ThrowBomb(bool right)
     {
-        // doe iets
+        Throwable bomb = GameWorld.Find("bomb") as Throwable;
+        bomb.Thrown(right, position);
     }
 
     public override void Update(GameTime gameTime)

@@ -8,16 +8,14 @@ using System.Threading.Tasks;
 
 class Throwable : AnimatedGameObject
 {
-    Vector2 speed;
-    Vector2 location;
-    bool alive;
-
-    public Throwable(Vector2 loc, Vector2 sped, SpriteSheet tex)
+    Vector2 start;
+    public Throwable(Vector2 start) : base(2, "bomb")
     {
-        speed = sped;
-        location = loc;
-        sprite = tex;
-        alive = true;
+        position = start;
+        this.start = start;
+        LoadAnimation("Sprites/Bomb", "idle", true);
+        PlayAnimation("idle");
+        this.visible = false;
     }
 
     public override void Update(GameTime gameTime)
@@ -30,22 +28,34 @@ class Throwable : AnimatedGameObject
     protected void UpdateSpeed(GameTime gameTime)
     {
         var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        position.X += speed.X * delta;
-        position.Y += speed.Y * delta;
-        speed.Y += 9.81f * delta;
+        position.X += velocity.X * delta;
+        position.Y += velocity.Y * delta;
+        velocity.Y += 300f * delta;
+    }
+
+    public override void Reset()
+    {
+        position = start;
+        this.visible = false;
+        velocity = Vector2.Zero;
+    }
+
+    public void Die()
+    {
+        this.Reset();
     }
 
     public void Thrown(bool right, Vector2 loc)
     {
+        this.visible = true;
         if (right)
         {
-            speed = new Vector2(200.0f, 0.0f);
+            velocity = new Vector2(600, 0.0f);
         }
         else
         {
-            speed = new Vector2(-200.0f, 0.0f);
+            velocity = new Vector2(-600, 0.0f);
         }
-        location = loc;
-        this.visible = true;
+        position = loc;
     }
 }

@@ -37,6 +37,7 @@ class Rocket : Enemy
             this.velocity.X *= -1;
         }
         CheckPlayerCollision();
+        CheckBombCollision();
         // check if we are outside the screen
         Rectangle screenBox = new Rectangle(0, 0, GameEnvironment.Screen.X, GameEnvironment.Screen.Y);
         if (!screenBox.Intersects(this.BoundingBox))
@@ -55,11 +56,21 @@ class Rocket : Enemy
             {
                 Reset();
                 player.Jump();
-            } else
+            }
+            else
             {
                 player.Die(false);
             }
         }
     }
 
+    public void CheckBombCollision()
+    {
+        Throwable bomb = GameWorld.Find("bomb") as Throwable;
+        if (CollidesWith(bomb) && visible)
+        {
+            Reset();
+            bomb.Die();
+        }
+    }
 }

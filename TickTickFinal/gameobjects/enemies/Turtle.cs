@@ -43,11 +43,13 @@ class Turtle : Enemy
             }
         }
         CheckPlayerCollision();
+        CheckBombCollision();
     }
 
     public void CheckPlayerCollision()
     {
         Player player = GameWorld.Find("player") as Player;
+        Throwable bomb = GameWorld.Find("bomb") as Throwable;
         if (!CollidesWith(player))
         {
             return;
@@ -59,6 +61,16 @@ class Turtle : Enemy
         else if (idleTime > 0 && player.Velocity.Y > 0)
         {
             player.Jump(1500);
+        }
+    }
+
+    public void CheckBombCollision()
+    {
+        Throwable bomb = GameWorld.Find("bomb") as Throwable;
+        if (CollidesWith(bomb) && visible)
+        { 
+            Reset();
+            bomb.Die();
         }
     }
 }
